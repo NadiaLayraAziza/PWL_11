@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Request\LoginRequest;
-use App\Request\RegisterRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use App\Traits\ApiResponse;
 use App\Http\Controllers\Controller;
+use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -39,7 +43,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
         $token = $user->createToken('auth_token')->plainTextToken;
-            
+
         return $this->apiSuccess([
             'token' => $token,
             'token_type' => 'Bearer',
